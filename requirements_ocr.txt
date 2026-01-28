@@ -1,0 +1,56 @@
+# ============================================================
+# Railway Wagon Inspection System
+# OCR SERVICE Requirements (chandra_ocr_venv)
+# Python 3.10+ Required
+# ============================================================
+#
+# Installation:
+#   python -m venv chandra_ocr_venv
+#   chandra_ocr_venv\Scripts\activate  (Windows)
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+#   pip install -r requirements_ocr.txt
+#
+# ============================================================
+
+# ==================== FastAPI Server ====================
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+
+# ==================== Core ML/Image Processing ====================
+numpy>=1.24.0
+opencv-python>=4.8.0
+Pillow>=10.0.0
+
+# ==================== PyTorch (CUDA 12.1) ====================
+# NOTE: Install separately FIRST with:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# Or for CPU only:
+#   pip install torch torchvision torchaudio
+# torch>=2.1.0
+# torchvision>=0.16.0
+# torchaudio>=2.1.0
+
+# ==================== Hugging Face / Transformers ====================
+transformers>=4.35.0
+huggingface-hub>=0.20.0
+safetensors>=0.4.0
+tokenizers>=0.15.0
+accelerate>=0.25.0
+
+# ==================== Qwen-VL OCR Model ====================
+qwen-vl-utils>=0.0.10
+einops>=0.7.0
+tiktoken>=0.5.0
+sentencepiece>=0.1.99
+
+# ==================== Utilities ====================
+requests>=2.31.0
+packaging>=23.0
+tqdm>=4.65.0
+
+# ============================================================
+# After installation, verify with:
+#   python -c "import torch; print(f'PyTorch: {torch.__version__}, CUDA: {torch.cuda.is_available()}')"
+#   python -c "import transformers; print(f'Transformers: {transformers.__version__}')"
+#   python -c "from qwen_vl_utils import process_vision_info; print('Qwen-VL OK')"
+# ============================================================

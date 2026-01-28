@@ -1,0 +1,65 @@
+# ============================================
+# Wagon Inspection System - Git Ignore
+# ============================================
+
+# Python Virtual Environments
+wagon_inspection_venv/
+chandra_ocr_venv/
+venv/
+.venv/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.Python
+
+# Model Weights - Now tracked with Git LFS
+# (Previously excluded, now included for LFS)
+
+# Node.js
+frontend/node_modules/
+frontend/dist/
+frontend/.cache/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Outputs & Temporary Files
+outputs/
+logs/
+temp_*.jpg
+temp_*.json
+*.db
+
+# Environment Variables
+.env
+.env.local
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Coverage & Testing
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Docker files (will add later after Docker Hub setup)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+

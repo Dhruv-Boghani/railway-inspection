@@ -1,0 +1,73 @@
+# ============================================================
+# Railway Wagon Inspection System
+# MAIN PIPELINE Requirements (wagon_inspection_venv)
+# Python 3.10+ Required
+# ============================================================
+# 
+# Installation:
+#   python -m venv wagon_inspection_venv
+#   wagon_inspection_venv\Scripts\activate  (Windows)
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+#   pip install -r requirements_main.txt
+#
+# ============================================================
+
+# ==================== FastAPI Backend ====================
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+python-multipart>=0.0.6
+pydantic>=2.0.0
+aiofiles>=23.0.0
+
+# ==================== Database ====================
+sqlalchemy>=2.0.0
+
+# ==================== Core ML/Image Processing ====================
+numpy>=1.24.0,<2.0.0
+opencv-python>=4.8.0
+Pillow>=10.0.0
+scikit-image>=0.21.0
+
+# ==================== PyTorch (CUDA 12.1) ====================
+# NOTE: Install separately with:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+# Or for CPU only:
+#   pip install torch torchvision
+# torch>=2.1.0
+# torchvision>=0.16.0
+
+# ==================== YOLO Detection (Stages 1, 4, 5) ====================
+ultralytics>=8.0.0
+
+# ==================== Image Enhancement (Stage 3) ====================
+# MPRNet and RealESRGAN dependencies
+basicsr>=1.4.2
+realesrgan>=0.3.0
+scipy>=1.10.0
+PyYAML>=6.0
+
+# ==================== Door Classification (Stage 4) ====================
+timm>=0.9.0
+
+# ==================== Quality Assessment (Stage 2) ====================
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# ==================== CRAFT Text Detection (Stage 6) ====================
+# Uses models/repos/CRAFT-pytorch
+
+# ==================== Utilities ====================
+tqdm>=4.65.0
+requests>=2.31.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# ==================== HTML to PDF (Reports) ====================
+# Note: html2pdf.js is used in frontend, not Python
+
+# ============================================================
+# After installation, verify with:
+#   python -c "import torch; print(f'PyTorch: {torch.__version__}, CUDA: {torch.cuda.is_available()}')"
+#   python -c "import ultralytics; print('Ultralytics OK')"
+#   python -c "import cv2; print(f'OpenCV: {cv2.__version__}')"
+# ============================================================
