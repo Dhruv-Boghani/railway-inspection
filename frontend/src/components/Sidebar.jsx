@@ -110,9 +110,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             {/* Footer */}
             {!isCollapsed && (
                 <div className="p-4 text-sm text-gray-500 text-center border-t border-white/10">
-                    <p className="text-gray-400">Team</p>
-                    <p>Missing Sem;colon</p>
-                    <p>© 2026 All Rights Reserved</p>
+                    <p className="text-gray-200">DEVELOPED BY</p>
+                    <p className="text-gray-200">Team HACKHUSTLER</p>
+                    <p className="text-gray-400">© 2026 All Rights Reserved</p>
                 </div>
             )}
         </div>
