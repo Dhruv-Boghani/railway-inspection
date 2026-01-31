@@ -11,7 +11,7 @@ const Layout = () => {
         <div className="min-h-screen bg-gray-100">
             <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
             <main
-                className={`${isCollapsed ? 'ml-16' : 'ml-56'} ${isAnalysisPage ? 'p-0' : 'p-6'}`}
+                className={`${isCollapsed ? 'ml-16' : 'ml-56'} ${isAnalysisPage ? 'p-6' : 'p-20'}`}
             >
                 <Outlet />
             </main>

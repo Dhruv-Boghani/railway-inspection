@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import { CheckCircle, AlertTriangle, XCircle, Clock, FileText, Layers, Play, Box, Wrench, Type, Info } from 'lucide-react';
+import { CheckCircle, AlertTriangle, XCircle, Clock, FileText, Layers, Play, Box, Wrench, Type, Info, Download, Share2, HardDrive } from 'lucide-react';
 import { useJob } from '../context/JobContext';
 import NoJobFound from '../components/NoJobFound';
 
@@ -14,6 +14,7 @@ const ResultsPage = () => {
     const [results, setResults] = useState(null);
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         if (!jobId) {
@@ -24,10 +25,10 @@ const ResultsPage = () => {
         if (jobId) setCurrentJobId(jobId);
         const fetchData = async () => {
             try {
-                const jobRes = await axios.get(`http://localhost:8000/jobs/${jobId}`);
+                const jobRes = await axios.get(`${backendUrl}/jobs/${jobId}`);
                 setJob(jobRes.data);
 
-                const resultRes = await axios.get(`http://localhost:8000/jobs/${jobId}/result`);
+                const resultRes = await axios.get(`${backendUrl}/jobs/${jobId}/result`);
                 setResults(resultRes.data);
             } catch (err) {
                 console.error("Error fetching results", err);
@@ -138,22 +139,22 @@ const ResultsPage = () => {
 
     // Chart Data - For TOP pipeline, show total defects if no breakdown
     const damageChartData = pipelineType === 'TOP' && totalDefectCount > 0 && (totalDents + totalScratches + totalCracks === 0)
-        ? [{ name: 'Defects', value: totalDefectCount, color: '#7C6CF2' }]
+        ? [{ name: 'Defects', value: totalDefectCount, color: '#8b5cf6' }]
         : [
-            { name: 'Dents', value: totalDents, color: '#2B2E6D' },
-            { name: 'Scratches', value: totalScratches, color: '#7C6CF2' },
-            { name: 'Cracks', value: totalCracks, color: '#a69df5ff' },
+            { name: 'Dents', value: totalDents, color: '#4f46e5' },
+            { name: 'Scratches', value: totalScratches, color: '#8b5cf6' },
+            { name: 'Cracks', value: totalCracks, color: '#a5b4fc' },
         ].filter(d => d.value > 0);
 
     const doorChartData = [
-        { name: 'Good', value: goodDoors, color: '#a69df5ff', fill: '#a69df5ff' },
-        { name: 'Damaged', value: damagedDoors, color: '#7C6CF2', fill: '#7C6CF2' },
-        { name: 'Missing', value: missingDoors, color: '#2B2E6D', fill: '#2B2E6D' },
+        { name: 'Good', value: goodDoors, color: '#a5b4fc', fill: '#a5b4fc' },
+        { name: 'Damaged', value: damagedDoors, color: '#8b5cf6', fill: '#8b5cf6' },
+        { name: 'Missing', value: missingDoors, color: '#4f46e5', fill: '#4f46e5' },
     ].filter(d => d.value > 0);
 
     const healthDistribution = [
-        { name: 'Good', value: goodConditionWagons, color: '#a69df5ff' },
-        { name: 'With Damage', value: totalDamageWagons, color: '#7C6CF2' },
+        { name: 'Good', value: goodConditionWagons, color: '#a5b4fc' },
+        { name: 'With Damage', value: totalDamageWagons, color: '#8b5cf6' },
     ];
 
     // Stage Processing Time Chart Data
@@ -170,94 +171,91 @@ const ResultsPage = () => {
         return {
             name: stageNames[stage] || stage,
             time: parseFloat(time.toFixed(2)),
-            color: '#7C6CF2',
+            color: '#8b5cf6',
         };
     }).filter(d => d.time > 0);
 
     // Get video URL
     const jobDirName = job?.output_dir?.split('\\').pop().split('/').pop();
-    const videoUrl = jobDirName ? `http://localhost:8000/outputs/${jobDirName}/stage1_annotated.mp4` : null;
+    const videoUrl = jobDirName ? `${backendUrl}/outputs/${jobDirName}/stage1_annotated.mp4` : null;
+
+    // Placeholder for wagonData, assuming it would be derived from results if the table was fully implemented
+    const wagonData = {}; // This would need to be populated if the table is fully functional
 
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h2 className="text-3xl font-bold text-primary">Inspection Results</h2>
-                    <p className="text-gray-500 mt-1">Comprehensive analysis of {totalWagons} wagons</p>
+                    <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Inspection Results</h1>
+                    <p className="text-slate-500 mt-1 font-medium">Detailed breakdown of current session analysis</p>
                 </div>
-                <div className="flex space-x-3">
-                    <button
-                        onClick={() => navigate(`/analysis/${jobId}`)}
-                        className="bg-primary text-white px-5 py-2.5 rounded-lg font-medium shadow-md hover:bg-primary-light flex items-center space-x-2 transition-colors"
-                    >
-                        <Layers className="w-4 h-4" />
-                        <span>Detailed Analysis</span>
+                <div className="flex gap-3">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-white text-slate-600 rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors font-medium">
+                        <Download className="w-4 h-4" />
+                        <span>Export PDF</span>
                     </button>
-                    <button
-                        onClick={() => navigate(`/report/${jobId}`)}
-                        className="bg-white border border-gray-200 text-gray-700 px-5 py-2.5 rounded-lg font-medium hover:bg-gray-50 flex items-center space-x-2 transition-colors"
-                    >
-                        <FileText className="w-4 h-4" />
-                        <span>Download Report</span>
+                    <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-primary-dark transition-all transform hover:-translate-y-0.5 font-medium">
+                        <Share2 className="w-4 h-4" />
+                        <span>Share Report</span>
                     </button>
                 </div>
             </div>
 
             {/* Key Metrics Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                <div className="glass-card hover:translate-y-[-2px] hover:shadow-xl transition-all p-5 rounded-2xl">
                     <div className="flex items-center justify-between mb-2">
-                        <div className="bg-primary/10 p-2 rounded-lg">
+                        <div className="bg-indigo-500/10 p-2 rounded-xl backdrop-blur-sm">
                             <Layers className="w-6 h-6 text-primary" />
                         </div>
-                        <span className="text-2xl font-bold text-primary">{totalWagons}</span>
+                        <span className="text-3xl font-bold text-slate-800">{totalWagons}</span>
                     </div>
-                    <p className="text-gray-500 text-sm font-medium">Total Wagons</p>
+                    <p className="text-indigo-900/40 text-sm font-bold uppercase tracking-wider">Total Wagons</p>
                 </div>
 
-                <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                <div className="glass-card hover:translate-y-[-2px] hover:shadow-xl transition-all p-5 rounded-2xl">
                     <div className="flex items-center justify-between mb-2">
-                        <div className="bg-success/10 p-2 rounded-lg">
-                            <CheckCircle className="w-6 h-6 text-success" />
+                        <div className="bg-emerald-500/10 p-2 rounded-xl backdrop-blur-sm">
+                            <CheckCircle className="w-6 h-6 text-emerald-500" />
                         </div>
-                        <span className="text-2xl font-bold text-success">{goodConditionWagons}</span>
+                        <span className="text-3xl font-bold text-slate-800">{goodConditionWagons}</span>
                     </div>
-                    <p className="text-gray-500 text-sm font-medium">Good Condition</p>
+                    <p className="text-emerald-900/40 text-sm font-bold uppercase tracking-wider">Good Condition</p>
                 </div>
 
-                <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                <div className="glass-card hover:translate-y-[-2px] hover:shadow-xl transition-all p-5 rounded-2xl">
                     <div className="flex items-center justify-between mb-2">
-                        <div className="bg-danger/10 p-2 rounded-lg">
-                            <AlertTriangle className="w-6 h-6 text-danger" />
+                        <div className="bg-red-500/10 p-2 rounded-xl backdrop-blur-sm">
+                            <AlertTriangle className="w-6 h-6 text-red-500" />
                         </div>
-                        <span className="text-2xl font-bold text-danger">{totalDamageWagons}</span>
+                        <span className="text-3xl font-bold text-slate-800">{totalDamageWagons}</span>
                     </div>
-                    <p className="text-gray-500 text-sm font-medium">With Damage</p>
+                    <p className="text-red-900/40 text-sm font-bold uppercase tracking-wider">With Damage</p>
                 </div>
 
-                <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                <div className="glass-card hover:translate-y-[-2px] hover:shadow-xl transition-all p-5 rounded-2xl">
                     <div className="flex items-center justify-between mb-2">
-                        <div className="bg-accent/10 p-2 rounded-lg">
+                        <div className="bg-purple-500/10 p-2 rounded-xl backdrop-blur-sm">
                             <Clock className="w-6 h-6 text-accent" />
                         </div>
-                        <span className="text-2xl font-bold text-accent">{totalTime.toFixed(1)}s</span>
+                        <span className="text-3xl font-bold text-slate-800">{totalTime.toFixed(1)}s</span>
                     </div>
-                    <p className="text-gray-500 text-sm font-medium">Processing Time</p>
+                    <p className="text-purple-900/40 text-sm font-bold uppercase tracking-wider">Processing Time</p>
                 </div>
             </div>
 
             {/* Video and Quick Stats */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Annotated Video */}
-                <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50">
+                <div className="lg:col-span-2 glass-panel rounded-2xl overflow-hidden">
+                    <div className="p-4 border-b border-white/40 bg-white/40 backdrop-blur-sm">
                         <div className="flex items-center space-x-2">
                             <Play className="w-5 h-5 text-primary" />
-                            <h3 className="font-bold text-gray-800">Annotated Inspection Video</h3>
+                            <h3 className="font-bold text-slate-800">Annotated Inspection Video</h3>
                         </div>
                     </div>
-                    <div className="p-4 bg-black flex flex-col items-center justify-center" style={{ minHeight: '400px' }}>
+                    <div className="p-4 bg-slate-900 flex flex-col items-center justify-center" style={{ minHeight: '400px' }}>
                         {videoUrl ? (
                             <>
                                 <video
@@ -281,7 +279,7 @@ const ResultsPage = () => {
                 </div>
 
                 {/* Quick Stats Panel */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col">
+                <div className="glass-panel rounded-xl p-6 flex flex-col">
                     <h3 className="font-bold text-gray-800 mb-4 flex items-center space-x-2">
                         <Info className="w-5 h-5 text-primary" />
                         <span>Quick Stats</span>
@@ -289,7 +287,7 @@ const ResultsPage = () => {
                     <div className="flex-1 flex flex-col justify-between space-y-4">
                         {/* OCR Success - Only for SIDE view */}
                         {cameraAngle !== 'TOP' && (
-                            <div className="flex-1 p-5 bg-gray-50 rounded-lg border border-gray-200 flex flex-col justify-center">
+                            <div className="glass-card p-5 rounded-lg flex flex-col justify-center">
                                 <div className="flex items-center justify-between mb-3">
                                     <span className="text-base font-medium text-gray-700 flex items-center space-x-2">
                                         <Type className="w-5 h-5 text-primary" />
@@ -306,7 +304,7 @@ const ResultsPage = () => {
 
                         {/* Total Doors - Only for SIDE view */}
                         {cameraAngle !== 'TOP' && (
-                            <div className="flex-1 p-5 bg-gray-50 rounded-lg border border-gray-200 flex flex-col justify-center">
+                            <div className="glass-card p-5 rounded-lg flex flex-col justify-center">
                                 <div className="flex items-center justify-between mb-3">
                                     <span className="text-base font-medium text-gray-700 flex items-center space-x-2">
                                         <Box className="w-5 h-5 text-primary" />
@@ -315,15 +313,15 @@ const ResultsPage = () => {
                                     <span className="text-2xl font-bold text-primary">{totalDoorsDetected}</span>
                                 </div>
                                 <div className="grid grid-cols-3 gap-3">
-                                    <div className="text-center p-3 bg-white rounded-lg border border-gray-200">
+                                    <div className="text-center p-3 bg-white/50 rounded-lg border border-gray-200">
                                         <div className="text-xl font-bold text-success">{goodDoors}</div>
                                         <div className="text-sm text-gray-500 mt-1">Good</div>
                                     </div>
-                                    <div className="text-center p-3 bg-white rounded-lg border border-gray-200">
+                                    <div className="text-center p-3 bg-white/50 rounded-lg border border-gray-200">
                                         <div className="text-xl font-bold text-warning">{damagedDoors}</div>
                                         <div className="text-sm text-gray-500 mt-1">Damaged</div>
                                     </div>
-                                    <div className="text-center p-3 bg-white rounded-lg border border-gray-200">
+                                    <div className="text-center p-3 bg-white/50 rounded-lg border border-gray-200">
                                         <div className="text-xl font-bold text-danger">{missingDoors}</div>
                                         <div className="text-sm text-gray-500 mt-1">Missing</div>
                                     </div>
@@ -332,7 +330,7 @@ const ResultsPage = () => {
                         )}
 
                         {/* Floor Damage (TOP) / Total Defects (SIDE) */}
-                        <div className="flex-1 p-5 bg-gray-50 rounded-lg border border-gray-200 flex flex-col justify-center">
+                        <div className="glass-card p-5 rounded-lg flex flex-col justify-center">
                             <div className="flex items-center justify-between mb-4">
                                 <span className="text-base font-medium text-gray-700 flex items-center space-x-2">
                                     <Wrench className="w-5 h-5 text-primary" />
@@ -344,16 +342,16 @@ const ResultsPage = () => {
                             </div>
                             {pipelineType === 'TOP' ? (
                                 <div className="space-y-4">
-                                    <div className="text-center p-6 bg-white rounded-xl border border-gray-200">
+                                    <div className="text-center p-6 bg-white/50 rounded-xl border border-gray-200">
                                         <div className="text-4xl font-bold text-accent mb-2">{totalDefectCount}</div>
                                         <div className="text-sm text-gray-500 font-medium">Floor Damage Detected</div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
-                                        <div className="text-center p-3 bg-white rounded-lg border border-gray-200">
+                                        <div className="text-center p-3 bg-white/50 rounded-lg border border-gray-200">
                                             <div className="text-xl font-bold text-danger">{totalDamageWagons}</div>
                                             <div className="text-xs text-gray-500">Wagons Affected</div>
                                         </div>
-                                        <div className="text-center p-3 bg-white rounded-lg border border-gray-200">
+                                        <div className="text-center p-3 bg-white/50 rounded-lg border border-gray-200">
                                             <div className="text-xl font-bold text-success">{goodConditionWagons}</div>
                                             <div className="text-xs text-gray-500">Good Condition</div>
                                         </div>
@@ -361,11 +359,11 @@ const ResultsPage = () => {
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div className="text-center p-3 bg-white rounded-lg border border-gray-200">
+                                    <div className="text-center p-3 bg-white/50 rounded-lg border border-gray-200">
                                         <div className="text-xl font-bold text-danger">{totalDents}</div>
                                         <div className="text-sm text-gray-500 mt-1">Dents</div>
                                     </div>
-                                    <div className="text-center p-3 bg-white rounded-lg border border-gray-200">
+                                    <div className="text-center p-3 bg-white/50 rounded-lg border border-gray-200">
                                         <div className="text-xl font-bold text-warning">{totalScratches}</div>
                                         <div className="text-sm text-gray-500 mt-1">Scratches</div>
                                     </div>
@@ -380,7 +378,7 @@ const ResultsPage = () => {
             {pipelineType !== 'TOP' && (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Health Distribution */}
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div className="glass-panel p-6 rounded-xl">
                         <h3 className="text-lg font-bold text-gray-800 mb-4">Wagon Health</h3>
                         <div className="h-[250px]">
                             <ResponsiveContainer width="100%" height="100%">

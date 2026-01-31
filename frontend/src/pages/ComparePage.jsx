@@ -65,8 +65,9 @@ const ComparePage = () => {
         formData.append('file', file);
 
         try {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
             setLoadingStatus('Running pipeline on blur frame...');
-            const res = await axios.post('http://localhost:8000/tools/compare-pipeline', formData, {
+            const res = await axios.post(`${backendUrl}/tools/compare-pipeline`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 timeout: 300000 // 5 minutes timeout for long-running pipeline
             });
@@ -105,11 +106,11 @@ const ComparePage = () => {
     // Helper to render severity badge  
     const SeverityBadge = ({ severity }) => {
         const colors = {
-            none: 'bg-green-100 text-green-700',
-            minor: 'bg-yellow-100 text-yellow-700',
-            moderate: 'bg-amber-100 text-amber-700',
-            severe: 'bg-red-100 text-red-700',
-            unknown: 'bg-gray-100 text-gray-600'
+            none: 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20',
+            minor: 'bg-yellow-50 text-yellow-800 ring-1 ring-inset ring-yellow-600/20',
+            moderate: 'bg-orange-50 text-orange-800 ring-1 ring-inset ring-orange-600/20',
+            severe: 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/10',
+            unknown: 'bg-slate-50 text-slate-600 ring-1 ring-inset ring-slate-500/10'
         };
         return (
             <span className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${colors[severity] || colors.unknown}`}>
@@ -127,39 +128,40 @@ const ComparePage = () => {
         const ocrResults = data.ocr_results || {};
 
         return (
-            <div className={`bg-white rounded-xl shadow-sm border ${isDeblur ? 'border-accent/30' : 'border-gray-200'} overflow-hidden`}>
+            <div className={`glass-card rounded-2xl overflow-hidden flex flex-col h-full ${isDeblur ? 'border-accent/40 shadow-accent/10' : ''}`}>
                 {/* Header */}
-                <div className={`px-4 py-3 ${isDeblur ? 'bg-accent/10' : 'bg-gray-50'} border-b`}>
-                    <h3 className={`font-bold ${isDeblur ? 'text-accent' : 'text-gray-700'}`}>
+                <div className={`px-4 py-3 border-b flex items-center justify-between ${isDeblur ? 'bg-accent/10 border-accent/20' : 'bg-white/40 border-white/50'}`}>
+                    <h3 className={`font-bold ${isDeblur ? 'text-accent' : 'text-slate-700'}`}>
                         {title}
                     </h3>
+                    {isDeblur && <span className="text-[10px] font-bold uppercase tracking-wider bg-accent text-white px-2 py-0.5 rounded-full shadow-sm shadow-accent/20">Enhanced</span>}
                 </div>
 
                 {/* Main Image */}
                 <div className="p-4">
                     {data.image_url && (
                         <img
-                            src={`http://localhost:8000${data.image_url}`}
+                            src={`${backendUrl}${data.image_url}`}
                             alt={title}
                             className="w-full h-48 object-contain bg-gray-100 rounded-lg mb-4"
                         />
                     )}
 
                     {/* Door Detection */}
-                    <div className="mb-5 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                    <div className="mb-5 p-4 bg-slate-50 rounded-xl border border-slate-200">
                         <div className="flex items-center gap-3 mb-3">
                             <div className="bg-primary/10 p-2 rounded-lg">
                                 <DoorOpen className="w-5 h-5 text-primary" />
                             </div>
-                            <span className="font-semibold text-base text-gray-800">Door Detection</span>
-                            <span className="ml-auto text-sm font-medium text-gray-500 bg-white px-2 py-1 rounded-lg border border-gray-200">
+                            <span className="font-semibold text-base text-slate-800">Door Detection</span>
+                            <span className="ml-auto text-sm font-medium text-slate-500 bg-white px-2 py-1 rounded-lg border border-slate-200">
                                 {doorResults.total_doors || 0} doors
                             </span>
                         </div>
                         <DoorCountBadge counts={doorResults.door_counts} />
                         {doorResults.annotated_url && (
                             <img
-                                src={`http://localhost:8000${doorResults.annotated_url}`}
+                                src={`${backendUrl}${doorResults.annotated_url}`}
                                 alt="Door annotations"
                                 className="w-full h-48 object-contain bg-white rounded-lg mt-3 border border-gray-200"
                             />
@@ -191,7 +193,7 @@ const ComparePage = () => {
                         </div>
                         {damageResults.annotated_url && (
                             <img
-                                src={`http://localhost:8000${damageResults.annotated_url}`}
+                                src={`${backendUrl}${damageResults.annotated_url}`}
                                 alt="Damage annotations"
                                 className="w-full h-48 object-contain bg-white rounded-lg mt-3 border border-gray-200"
                             />
@@ -302,10 +304,10 @@ const ComparePage = () => {
 
 
             {/* Upload Section */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div className="glass-panel p-6 rounded-2xl">
                 <div
-                    className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
-                        ${file ? 'border-accent/50 bg-accent/5' : 'border-gray-300 hover:border-primary/30 hover:bg-gray-50'}`}
+                    className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-300
+                        ${file ? 'border-accent/50 bg-accent/5' : 'border-slate-300 hover:border-primary/50 hover:bg-white/60 hover:shadow-lg'}`}
                     onClick={() => !file && fileInputRef.current?.click()}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => {

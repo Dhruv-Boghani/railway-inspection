@@ -1,25 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .glass-panel {
+        @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-xl shadow-indigo-500/5;
+    }
+    
+    .glass-card {
+        @apply bg-white/60 backdrop-blur-md border border-white/30 shadow-lg shadow-indigo-500/5 hover:bg-white/80 transition-all duration-300;
+    }
+}
+
 body {
-    @apply bg-gray-100 text-gray-900;
+    @apply text-slate-800 font-sans;
+    background: radial-gradient(circle at 10% 20%, rgba(224, 231, 255, 0.4) 0%, rgba(241, 245, 249, 0) 40%),
+                radial-gradient(circle at 90% 80%, rgba(238, 242, 255, 0.4) 0%, rgba(241, 245, 249, 0) 40%),
+                #f8fafc;
+    font-family: 'Inter', sans-serif;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    @apply bg-gray-200;
+    @apply bg-transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-gray-400 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-500;
+    @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
 }

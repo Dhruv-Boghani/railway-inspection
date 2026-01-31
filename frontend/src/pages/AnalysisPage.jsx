@@ -5,6 +5,7 @@ import { ChevronRight, Eye, AlertCircle, Type, Box, CheckCircle, ZoomIn, ZoomOut
 import { useJob } from '../context/JobContext';
 import NoJobFound from '../components/NoJobFound';
 
+
 // Wagon Number Parser Utility
 const parseWagonNumber = (number) => {
     if (!number || typeof number !== 'string' || number.length !== 11 || !/^\d{11}$/.test(number)) {
@@ -114,10 +115,11 @@ const AnalysisPage = () => {
         if (jobId) setCurrentJobId(jobId);
 
         const fetchData = async () => {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
             try {
-                const jobRes = await axios.get(`http://localhost:8000/jobs/${jobId}`);
+                const jobRes = await axios.get(`${backendUrl}/jobs/${jobId}`);
                 setJob(jobRes.data);
-                const resultRes = await axios.get(`http://localhost:8000/jobs/${jobId}/result`);
+                const resultRes = await axios.get(`${backendUrl}/jobs/${jobId}/result`);
                 setResults(resultRes.data);
 
                 // Handle both TOP and SIDE pipeline data structures
@@ -237,6 +239,7 @@ const AnalysisPage = () => {
     // Image URL Helper
     const getImageUrl = (type) => {
         try {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
             let absolutePath = "";
             if (type === 'original' || type === 'enhanced' || type === 'damage') {
                 if (currentWagonStats.annotated_image_path) absolutePath = currentWagonStats.annotated_image_path;
@@ -256,11 +259,11 @@ const AnalysisPage = () => {
                         const outputDirParts = job.output_dir.split('outputs');
                         if (outputDirParts.length > 1) {
                             const jobFolder = outputDirParts[1].replace(/\\/g, '/');
-                            return `http://localhost:8000/outputs${jobFolder}/stage6_craft_annotated/${craftImageName}`;
+                            return `${backendUrl}/outputs${jobFolder}/stage6_craft_annotated/${craftImageName}`;
                         }
                     }
                     // Fallback to old path format
-                    return `http://localhost:8000/outputs/stage6_craft_annotated/${craftImageName}`;
+                    return `${backendUrl}/outputs/stage6_craft_annotated/${craftImageName}`;
                 }
             }
 
@@ -269,7 +272,7 @@ const AnalysisPage = () => {
             const parts = absolutePath.split('outputs');
             if (parts.length > 1) {
                 const relative = parts[1].replace(/\\/g, '/');
-                return `http://localhost:8000/outputs${relative}`;
+                return `${backendUrl}/outputs${relative}`;
             }
             return "https://placehold.co/800x400/e2e8f0/1e293b?text=Invalid+Path";
         } catch (e) {
@@ -290,11 +293,12 @@ const AnalysisPage = () => {
     return (
         <div className="flex h-screen overflow-hidden">
             {/* Sidebar List */}
-            <div className="w-72 bg-white border-r border-gray-200 flex flex-col h-full">
-                <div className="p-3 border-b border-gray-100 font-bold text-gray-700 text-base flex-shrink-0">
-                    Wagons ({sortedWagonKeys.length})
+            <div className="w-80 glass-panel border-r-0 rounded-r-2xl flex flex-col h-full z-10 my-4 ml-20 backdrop-blur-2xl">
+                <div className="p-4 border-b border-indigo-100/50 font-bold text-slate-700 text-base flex-shrink-0 flex justify-between items-center bg-white/40 backdrop-blur-sm rounded-tr-2xl">
+                    <span>Wagons</span>
+                    <span className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full text-xs font-bold border border-indigo-200">{sortedWagonKeys.length}</span>
                 </div>
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto custom-scrollbar">
                     {sortedWagonKeys.map(id => {
                         const stats = damageData[id] || {};
                         const issues = (stats.total_detections || 0);
@@ -302,19 +306,19 @@ const AnalysisPage = () => {
                             <button
                                 key={id}
                                 onClick={() => setSelectedWagonId(id)}
-                                className={`w-full p-3 flex items-center justify-between border-b border-gray-100 hover:bg-gray-50 transition-colors text-left
-                                    ${selectedWagonId === id ? 'bg-blue-50 border-l-4 border-l-primary' : ''}`}
+                                className={`w-full p-4 flex items-center justify-between border-b border-indigo-50/50 hover:bg-white/60 transition-all duration-200 text-left group
+                                    ${selectedWagonId === id ? 'bg-white/80 border-l-4 border-l-primary shadow-sm' : 'border-l-4 border-l-transparent'}`}
                             >
                                 <div>
-                                    <span className="font-medium text-gray-800 block capitalize text-base">{id.replace('_', ' ')}</span>
-                                    <span className="text-sm text-gray-500">
+                                    <span className={`font-medium block capitalize text-base transition-colors ${selectedWagonId === id ? 'text-primary' : 'text-slate-600 group-hover:text-slate-800'}`}>{id.replace('_', ' ')}</span>
+                                    <span className="text-sm text-slate-400">
                                         {issues === 0 ? 'Good Condition' : `${issues} Issues`}
                                     </span>
                                 </div>
                                 {issues > 0 ? (
                                     <AlertCircle className="w-4 h-4 text-danger" />
                                 ) : (
-                                    <div className="w-2.5 h-2.5 rounded-full bg-success mr-1"></div>
+                                    <div className="w-2.5 h-2.5 rounded-full bg-success mr-1 shadow-[0_0_10px_rgba(34,197,94,0.4)]"></div>
                                 )}
                             </button>
                         );
@@ -323,37 +327,39 @@ const AnalysisPage = () => {
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col h-full overflow-hidden">
-                <div className="bg-white flex flex-col h-full">
+            <div className="flex-1 flex flex-col h-full overflow-hidden p-4 gap-4">
+                <div className="glass-panel rounded-2xl flex flex-col h-full overflow-hidden">
                     {/* Toolbar */}
-                    <div className="p-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 flex-shrink-0">
-                        <h2 className="font-bold text-xl text-primary capitalize">{selectedWagonId?.replace('_', ' ')} Analysis</h2>
-                        <div className="flex bg-white rounded-lg p-1 border shadow-sm">
+                    <div className="p-4 border-b border-indigo-100/50 flex justify-between items-center bg-white/40 backdrop-blur-sm flex-shrink-0 z-20">
+                        <h2 className="font-bold text-xl text-slate-800 capitalize flex items-center gap-2">
+                             <span className="text-primary">{selectedWagonId?.replace('_', ' ')}</span> Analysis
+                        </h2>
+                        <div className="flex bg-slate-100/50 rounded-xl p-1 border border-white/40 shadow-inner backdrop-blur-sm">
                             {cameraAngle !== 'TOP' && (
                                 <button
                                     onClick={() => setViewMode('doors')}
-                                    className={`px-3 py-1.5 rounded text-md font-medium flex items-center space-x-1.5 transition-all
-                                    ${viewMode === 'doors' ? 'bg-primary text-white shadow' : 'text-gray-600 hover:bg-gray-100'}`}
+                                    className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2 transition-all
+                                    ${viewMode === 'doors' ? 'bg-white text-primary shadow-md shadow-indigo-500/10' : 'text-slate-500 hover:bg-white/50 hover:text-slate-700'}`}
                                 >
-                                    <Box className="w-4.5 h-4.5" />
+                                    <Box className="w-4 h-4" />
                                     <span>Doors</span>
                                 </button>
                             )}
                             <button
                                 onClick={() => setViewMode('damage')}
-                                className={`px-3 py-1.5 rounded text-md font-medium flex items-center space-x-1.5 transition-all
-                                    ${viewMode === 'damage' ? 'bg-primary text-white shadow' : 'text-gray-600 hover:bg-gray-100'}`}
+                                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2 transition-all
+                                    ${viewMode === 'damage' ? 'bg-white text-primary shadow-md shadow-indigo-500/10' : 'text-slate-500 hover:bg-white/50 hover:text-slate-700'}`}
                             >
-                                <AlertCircle className="w-4.5 h-4.5" />
+                                <AlertCircle className="w-4 h-4" />
                                 <span>Damage</span>
                             </button>
                             {cameraAngle !== 'TOP' && (
                                 <button
                                     onClick={() => setViewMode('ocr')}
-                                    className={`px-3 py-1.5 rounded text-md font-medium flex items-center space-x-1.5 transition-all
-                                    ${viewMode === 'ocr' ? 'bg-primary text-white shadow' : 'text-gray-600 hover:bg-gray-100'}`}
+                                    className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2 transition-all
+                                    ${viewMode === 'ocr' ? 'bg-white text-primary shadow-md shadow-indigo-500/10' : 'text-slate-500 hover:bg-white/50 hover:text-slate-700'}`}
                                 >
-                                    <Type className="w-4.5 h-4.5" />
+                                    <Type className="w-4 h-4" />
                                     <span>OCR</span>
                                 </button>
                             )}
@@ -362,7 +368,7 @@ const AnalysisPage = () => {
 
                     {/* Image Viewer */}
                     <div
-                        className="flex-1 bg-black/5 relative flex items-center justify-center p-3 min-h-0 overflow-hidden"
+                        className="flex-1 bg-slate-50/50 relative flex items-center justify-center p-4 min-h-0 overflow-hidden backdrop-blur-sm"
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
@@ -394,7 +400,7 @@ const AnalysisPage = () => {
                     </div>
 
                     {/* Bottom Panel */}
-                    <div className={`p-4 border-t border-gray-100 grid gap-4 bg-gray-50/30 flex-shrink-0 ${pipelineType === 'TOP' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-3'}`} style={{ gridAutoRows: '1fr' }}>
+                    <div className={`p-4 border-t border-indigo-100/50 grid gap-4 bg-white/30 backdrop-blur-sm flex-shrink-0 ${pipelineType === 'TOP' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-3'}`} style={{ gridAutoRows: '1fr' }}>
                         {/* OCR Section */}
                         {pipelineType !== 'TOP' && (() => {
                             // Helper to validate number length (max 22 digits)
@@ -419,10 +425,12 @@ const AnalysisPage = () => {
                             const parsedWagon = validDetectedNumber ? parseWagonNumber(validDetectedNumber) : null;
 
                             return (
-                                <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm h-full flex flex-col">
+                                <div className="glass-card rounded-xl p-4 h-full flex flex-col">
                                     <div className="flex items-center space-x-2 mb-3">
-                                        <Type className="w-5 h-5 text-primary" />
-                                        <h4 className="text-base font-bold text-gray-700 uppercase">Wagon Number</h4>
+                                        <div className="bg-primary/10 p-1.5 rounded-lg border border-primary/10">
+                                            <Type className="w-4 h-4 text-primary" />
+                                        </div>
+                                        <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Wagon Number</h4>
                                     </div>
                                     {validDetectedNumber && parsedWagon ? (
                                         <div className="bg-success/5 p-4 rounded-lg border border-success/20 shadow-sm flex-1">
@@ -506,10 +514,12 @@ const AnalysisPage = () => {
                         })()}
 
                         {/* Damage Section - Full width for TOP, normal for SIDE */}
-                        <div className={`bg-white p-4 rounded-lg border border-gray-200 shadow-sm h-full flex flex-col ${pipelineType === 'TOP' ? '' : ''}`}>
+                        <div className={`glass-card rounded-xl p-4 h-full flex flex-col ${pipelineType === 'TOP' ? '' : ''}`}>
                             <div className="flex items-center space-x-2 mb-3">
-                                <AlertCircle className="w-5 h-5 text-primary" />
-                                <h4 className="text-base font-bold text-gray-700 uppercase">Damage Detection</h4>
+                                <div className="bg-primary/10 p-1.5 rounded-lg border border-primary/10">
+                                    <AlertCircle className="w-4 h-4 text-primary" />
+                                </div>
+                                <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Damage Detection</h4>
                                 {pipelineType === 'TOP' && currentWagonStats.has_damage && (
                                     <span className="ml-auto px-2 py-1 bg-danger/10 text-danger text-xs font-medium rounded-full">
                                         Damage Found
@@ -595,10 +605,12 @@ const AnalysisPage = () => {
 
                         {/* Door Section */}
                         {pipelineType !== 'TOP' && (
-                            <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm h-full flex flex-col">
+                            <div className="glass-card rounded-xl p-4 h-full flex flex-col">
                                 <div className="flex items-center space-x-2 mb-3">
-                                    <Box className="w-5 h-5 text-primary" />
-                                    <h4 className="text-base font-bold text-gray-700 uppercase">Doors Status</h4>
+                                    <div className="bg-primary/10 p-1.5 rounded-lg border border-primary/10">
+                                        <Box className="w-4 h-4 text-primary" />
+                                    </div>
+                                    <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Doors Status</h4>
                                 </div>
                                 <div className="flex-1">
                                     {currentWagonDoors.door_counts && Object.entries(currentWagonDoors.door_counts).filter(([_, count]) => count > 0).length > 0 ? (

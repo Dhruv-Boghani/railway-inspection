@@ -57,7 +57,8 @@ const ProcessingPage = () => {
 
         const fetchStatus = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/jobs/${jobId}`);
+                const backendUrl = import.meta.env.VITE_BACKEND_URL;
+                const response = await axios.get(`${backendUrl}/jobs/${jobId}`);
                 const data = response.data;
                 setJob(data);
 
@@ -74,7 +75,7 @@ const ProcessingPage = () => {
                     // verify that the result file actually exists
                     if (wasAlreadyCompleted.current) {
                         try {
-                            await axios.get(`http://localhost:8000/jobs/${jobId}/result`);
+                            await axios.get(`${backendUrl}/jobs/${jobId}/result`);
                         } catch (resultErr) {
                             // Result file is missing - show upload page
                             if (resultErr.response && (resultErr.response.status === 404 || resultErr.response.status === 400)) {

@@ -3,6 +3,11 @@
 An AI-powered railway wagon inspection system that processes video footage to automatically detect wagons, assess image quality, enhance blur/low-light frames, detect door conditions, identify damage, and extract wagon numbers via OCR.
 
 ---
+## Links of the project
+
+frontend : 
+backend : https://dhruvboghani-wegon-inspaction-server.hf.space/
+chandra-ocr : https://dhruvboghani-railway-inspection-try.hf.space/
 
 ## 📋 Table of Contents
 
@@ -304,7 +309,7 @@ start.bat
 ```powershell
 wagon_inspection_venv\Scripts\activate
 cd backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn api:app --reload --host 0.0.0.0 --port 8000
 ```
 
 **Terminal 2: OCR Server**
@@ -482,7 +487,7 @@ The UI uses an Indigo/Violet color scheme:
 
 ## 👥 Team
 
-**Missing Sem;colon**
+**Developed by TEAM HACKHUSTLERS**
 
 © 2026 All Rights Reserved
 

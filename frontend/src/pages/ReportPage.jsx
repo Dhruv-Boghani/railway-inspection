@@ -8,11 +8,12 @@ const ReportPage = () => {
     const navigate = useNavigate();
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/jobs');
+                const response = await axios.get(`${backendUrl}/jobs/`);
                 // Filter only completed jobs and sort by ID descending (latest first)
                 const completedJobs = response.data
                     .filter(job => job.status === 'completed')

@@ -40,7 +40,8 @@ const UploadPage = () => {
         formData.append('camera_angle', cameraAngle);
 
         try {
-            const response = await axios.post('http://localhost:8000/jobs/', formData, {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
+            const response = await axios.post(`${backendUrl}/jobs/`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             const jobId = response.data.id;
@@ -189,7 +190,7 @@ const UploadPage = () => {
 
                     <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6">
                         <p className="text-sm text-emerald-700">
-                            <span className="font-semibold">Note:</span> Typical processing takes around 3-4 seconds per wagon but the exact time depends on the resolution of the input data and number of wagons. As the wagon count increases, the processing time will also increase linearly. Input resolution and format further influence overall performance.
+                            <span className="font-semibold"> Benchmark Note: </span> This application utilizes a multi-agent pipeline involving ~1.4GB of model weights. While local inference on an NVIDIA GPU achieves a runtime of 4-5 minutes, the current Hugging Face Space runs on 2 vCPUs (16GB RAM) without GPU acceleration. Consequently, users should expect a processing duration of 20-30 minutes for the full pipeline.
                         </p>
                     </div>
 

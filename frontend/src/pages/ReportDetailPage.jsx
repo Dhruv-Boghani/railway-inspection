@@ -23,9 +23,10 @@ const ReportDetailPage = () => {
         }
         const fetchData = async () => {
             try {
+                const backendUrl = import.meta.env.VITE_BACKEND_URL;
                 const [jobRes, resultRes] = await Promise.all([
-                    axios.get(`http://localhost:8000/jobs/${jobId}`),
-                    axios.get(`http://localhost:8000/jobs/${jobId}/result`)
+                    axios.get(`${backendUrl}/jobs/${jobId}`),
+                    axios.get(`${backendUrl}/jobs/${jobId}/result`)
                 ]);
                 setJob(jobRes.data);
                 setResults(resultRes.data);
