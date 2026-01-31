@@ -42,13 +42,11 @@ const Documentation = () => {
               className="w-full h-full object-cover"
               controls
               preload="metadata"
+              src="https://res.cloudinary.com/dbl1arbid/video/upload/v1769900692/VID_20260201_013152_web_zbnrsj.mp4"
             >
-              <source
-                src={`${import.meta.env.BASE_URL}VID_20260201_013152_web.mp4`}
-                type="video/mp4"
-              />
               Your browser does not support the video tag.
             </video>
+
 
           </div>
           <p className="text-slate-500 text-sm">
@@ -70,28 +68,26 @@ const Documentation = () => {
               className="w-full h-full object-cover"
               controls
               preload="metadata"
+              src="https://res.cloudinary.com/dbl1arbid/video/upload/v1769900693/test4_web_zxqklw.mp4"
             >
-              <source
-                src={`${import.meta.env.BASE_URL}test4_web.mp4`}
-                type="video/mp4"
-              />
               Your browser does not support the video tag.
             </video>
+
           </div>
           <p className="text-slate-500 text-sm">
             This is a sample railway inspection video used to test the system's
             performance and accuracy.
           </p>
           <div className="mt-4">
-            <a
-              href={`${import.meta.env.BASE_URL}test4_web.mp4`}
-              type="video/mp4"
-              download
-              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg"
-            >
-              <Download className="w-4 h-4" />
-              Download Test Video
-            </a>
+          <a
+            href="https://res.cloudinary.com/dbl1arbid/video/upload/fl_attachment/test4_web_zxqklw.mp4"
+            download
+            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg"
+          >
+            <Download className="w-4 h-4" />
+            Download Test Video
+          </a>
+
 
           </div>
         </div>
