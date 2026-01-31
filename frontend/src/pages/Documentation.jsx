@@ -39,12 +39,13 @@ const Documentation = () => {
           </div>
           <div className="bg-slate-900 rounded-xl overflow-hidden shadow-lg aspect-video mb-4 relative group-hover:scale-[1.01] transition-transform duration-300">
             <video
-              className="w-full h-full object-cover"
-              controls
-              src="/VID_20260201_013152.mp4"
-            >
-              Your browser does not support the video tag.
-            </video>
+  className="w-full h-full object-cover"
+  controls
+  src={`${import.meta.env.BASE_URL}VID_20260201_013152.mp4`}
+>
+  Your browser does not support the video tag.
+</video>
+
           </div>
           <p className="text-slate-500 text-sm">
             A comprehensive overview of the railway inspection system,
@@ -64,7 +65,7 @@ const Documentation = () => {
             <video
               className="w-full h-full object-cover"
               controls
-              src="/test4.mp4"
+              src={`${import.meta.env.BASE_URL}test4.mp4`}
             >
               Your browser does not support the video tag.
             </video>
@@ -75,13 +76,14 @@ const Documentation = () => {
           </p>
           <div className="mt-4">
             <a
-              href="/test4.mp4"
+              href={`${import.meta.env.BASE_URL}test4.mp4`}
               download
-              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg"
             >
               <Download className="w-4 h-4" />
               Download Test Video
             </a>
+
           </div>
         </div>
       </div>
