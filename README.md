@@ -5,9 +5,11 @@ An AI-powered railway wagon inspection system that processes video footage to au
 ---
 ## Links of the project
 
-frontend : 
-backend : https://dhruvboghani-wegon-inspaction-server.hf.space/
-chandra-ocr : https://dhruvboghani-railway-inspection-try.hf.space/
+frontend : https://railway-inspection-lovat.vercel.app/upload
+
+backend : https://dhruvboghani-wegon-inspaction-server.hf.space
+
+chandra-ocr : https://dhruvboghani-railway-inspection-try.hf.space
 
 ## 📋 Table of Contents
 
