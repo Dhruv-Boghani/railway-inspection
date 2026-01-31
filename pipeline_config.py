@@ -35,7 +35,7 @@ class Stage1Config:
 
     # Video processing
     direction: str = "LR"  # "LR" (left-to-right) or "RL" (right-to-left)
-    device: str = "cpu"    # "cpu", "cuda", or "mps"
+    device: str = "cuda"    # "cuda", "cuda", or "mps"
     img_size: int = 960
 
     # Detection parameters
@@ -108,7 +108,7 @@ class Stage3Config:
     num_cab: int = 6
 
     # Device
-    device: str = "cpu"              # "cpu" or "cuda"
+    device: str = "cuda"              # "cuda" or "cuda"
 
     # Output options
     max_image_size: int = 1024
@@ -144,7 +144,7 @@ class Stage4Config:
     use_tta: bool = True               # Test-time augmentation for classification
 
     # Device
-    device: str = "cpu"                # "cpu" or "cuda"
+    device: str = "cuda"                # "cuda" or "cuda"
 
     # Output options
     save_door_rois: bool = True
@@ -167,7 +167,7 @@ class Stage5Config:
     # Detection parameters
     conf_threshold: float = 0.25  # Damage detection confidence
     img_size: int = 640          # Input image size
-    device: str = "cpu"          # "cpu" or "cuda"
+    device: str = "cuda"          # "cuda" or "cuda"
 
     # Severity thresholds (% of image area)
     minor_damage_threshold: float = 0.5  # 0–0.5% = minor

@@ -41,7 +41,7 @@ const Documentation = () => {
             <video
               className="w-full h-full object-cover"
               controls
-              src="../../public/VID_20260201_013152.mp4"
+              src="/VID_20260201_013152.mp4"
             >
               Your browser does not support the video tag.
             </video>
@@ -64,7 +64,7 @@ const Documentation = () => {
             <video
               className="w-full h-full object-cover"
               controls
-              src="../../public/test4.mp4"
+              src="/test4.mp4"
             >
               Your browser does not support the video tag.
             </video>
