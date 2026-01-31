@@ -188,7 +188,7 @@ const UploadPage = () => {
                         </p>
                     </div>
 
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6">
+                    <div className="bg-red-50 border border-red-500 rounded-lg p-4 mb-6">
                         <p className="text-sm text-red-700">
                             <span className="font-semibold"> Benchmark Note: </span> This application utilizes a multi-agent pipeline involving ~1.4GB of model weights. While local inference on an NVIDIA GPU achieves a runtime of 4-5 minutes, the current Hugging Face Space runs on 2 vCPUs (16GB RAM) without GPU acceleration. Consequently, users should expect a processing duration of 20-30 minutes for the full pipeline.
                         </p>

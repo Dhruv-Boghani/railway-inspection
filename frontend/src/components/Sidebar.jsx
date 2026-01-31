@@ -34,7 +34,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
     return (
         <div
-            className={`fixed left-0 top-0 h-screen bg-primary-dark text-white flex flex-col z-50 ${isCollapsed ? 'w-16' : 'w-56'
+            className={`fixed left-0 top-0 h-screen bg-slate-900 text-white flex flex-col z-50 ${isCollapsed ? 'w-16' : 'w-56'
                 }`}
         >
             {/* Logo Header */}
