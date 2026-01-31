@@ -41,7 +41,7 @@ const Documentation = () => {
             <video
   className="w-full h-full object-cover"
   controls
-  src={`${import.meta.env.BASE_URL}VID_20260201_013152.mp4`}
+  src={`${import.meta.env.BASE_URL}VID_20260201_013152_web.mp4`}
 >
   Your browser does not support the video tag.
 </video>
@@ -65,7 +65,7 @@ const Documentation = () => {
             <video
               className="w-full h-full object-cover"
               controls
-              src={`${import.meta.env.BASE_URL}test4.mp4`}
+              src={`${import.meta.env.BASE_URL}test4_web.mp4`}
             >
               Your browser does not support the video tag.
             </video>
@@ -76,7 +76,7 @@ const Documentation = () => {
           </p>
           <div className="mt-4">
             <a
-              href={`${import.meta.env.BASE_URL}test4.mp4`}
+              href={`${import.meta.env.BASE_URL}test4_web.mp4`}
               download
               className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg"
             >
