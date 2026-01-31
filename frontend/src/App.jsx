@@ -7,6 +7,7 @@ import AnalysisPage from './pages/AnalysisPage';
 import ReportPage from './pages/ReportPage';
 import ReportDetailPage from './pages/ReportDetailPage';
 import ComparePage from './pages/ComparePage';
+import Documentation from './pages/Documentation';
 
 import { JobProvider } from './context/JobContext';
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="reports" element={<ReportPage />} />
             <Route path="report/:jobId" element={<ReportDetailPage />} />
             <Route path="compare" element={<ComparePage />} />
+            <Route path="documentation" element={<Documentation />} />
           </Route>
         </Routes>
       </Router>
