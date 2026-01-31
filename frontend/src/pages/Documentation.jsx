@@ -39,12 +39,16 @@ const Documentation = () => {
           </div>
           <div className="bg-slate-900 rounded-xl overflow-hidden shadow-lg aspect-video mb-4 relative group-hover:scale-[1.01] transition-transform duration-300">
             <video
-  className="w-full h-full object-cover"
-  controls
-  src={`${import.meta.env.BASE_URL}VID_20260201_013152_web.mp4`}
->
-  Your browser does not support the video tag.
-</video>
+              className="w-full h-full object-cover"
+              controls
+              preload="metadata"
+            >
+              <source
+                src={`${import.meta.env.BASE_URL}VID_20260201_013152_web.mp4`}
+                type="video/mp4"
+              />
+              Your browser does not support the video tag.
+            </video>
 
           </div>
           <p className="text-slate-500 text-sm">
@@ -65,8 +69,12 @@ const Documentation = () => {
             <video
               className="w-full h-full object-cover"
               controls
-              src={`${import.meta.env.BASE_URL}test4_web.mp4`}
+              preload="metadata"
             >
+              <source
+                src={`${import.meta.env.BASE_URL}test4_web.mp4`}
+                type="video/mp4"
+              />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -77,6 +85,7 @@ const Documentation = () => {
           <div className="mt-4">
             <a
               href={`${import.meta.env.BASE_URL}test4_web.mp4`}
+              type="video/mp4"
               download
               className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg"
             >
