@@ -41,7 +41,7 @@ const Documentation = () => {
             <video
               className="w-full h-full object-cover"
               controls
-              src="../assets/VID_20260201_013152.mp4"
+              src="../../public/VID_20260201_013152.mp4"
             >
               Your browser does not support the video tag.
             </video>
@@ -61,17 +61,21 @@ const Documentation = () => {
             <h2 className="text-xl font-bold text-slate-700">Test Video</h2>
           </div>
           <div className="bg-slate-900 rounded-xl overflow-hidden shadow-lg aspect-video mb-4 relative group-hover:scale-[1.01] transition-transform duration-300">
-            <video className="w-full h-full object-cover" controls src="xyz">
+            <video
+              className="w-full h-full object-cover"
+              controls
+              src="../../public/test4.mp4"
+            >
               Your browser does not support the video tag.
             </video>
           </div>
           <p className="text-slate-500 text-sm">
-            Detailed walkthrough of the analysis results page, explaining how to
-            interpret defect detection data and reports.
+            This is a sample railway inspection video used to test the system's
+            performance and accuracy.
           </p>
           <div className="mt-4">
             <a
-              href="xyz"
+              href="../../public/test4.mp4"
               download
               className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium shadow-sm"
             >
