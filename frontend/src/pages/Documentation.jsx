@@ -42,7 +42,7 @@ const Documentation = () => {
               className="w-full h-full object-cover"
               controls
               preload="metadata"
-              src="https://res.cloudinary.com/dbl1arbid/video/upload/v1769900692/VID_20260201_013152_web_zbnrsj.mp4"
+              src="https://res.cloudinary.com/dbl1arbid/video/upload/v1782623799/VID_20260201_013152_jnay7i.mp4"
             >
               Your browser does not support the video tag.
             </video>
